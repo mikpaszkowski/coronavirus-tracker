@@ -64,7 +64,7 @@ public class CoronaVirusDataService {
             locationStats.setState(record.get("Province/State"));
             locationStats.setCountry(record.get("Country/Region"));
             locationStats.setLatestTotalCases(Integer.parseInt(record.get(record.size()-1)));
-            //locationStats.setLatestTotalRecoveryCases(getTotalDataRecoveryCases(i));
+            locationStats.setLatestTotalRecoveryCases(getTotalDataRecoveryCases(i));
 
             int latestTotalCases = Integer.parseInt(record.get(record.size()-1));
             int differenceFromPrevDay = latestTotalCases - Integer.parseInt(record.get(record.size() - 2));
@@ -76,7 +76,7 @@ public class CoronaVirusDataService {
         this.allStats = newStats;
     }
 
-    /*
+
     private int getTotalDataRecoveryCases(int i) throws IOException, InterruptedException {
 
         List<LocationStats> newRecoveryStats = new ArrayList<>();
@@ -98,7 +98,7 @@ public class CoronaVirusDataService {
         }
         return allStatsRecoveryList.get(i);
     }
-*/
+
     @PostConstruct
     @Scheduled(cron = "0 0 5,12 * * *")
     public void fetchVirusDataRecovery() throws IOException, InterruptedException {
