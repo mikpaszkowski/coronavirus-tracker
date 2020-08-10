@@ -8,6 +8,17 @@ public class LocationStats {
     private String country;
     private int latestTotalCases;
     private int diffFromPrevDay;
+    private int latestTotalRecoveryCases;
+
+    public int getDiffRecoveryCasesFromPrevDay() {
+        return diffRecoveryCasesFromPrevDay;
+    }
+
+    public void setDiffRecoveryCasesFromPrevDay(int diffRecoveryCasesFromPrevDay) {
+        this.diffRecoveryCasesFromPrevDay = diffRecoveryCasesFromPrevDay;
+    }
+
+    private int diffRecoveryCasesFromPrevDay;
 
     public String getState() {
         return state;
@@ -48,5 +59,13 @@ public class LocationStats {
 
     public void setDiffFromPrevDay(int diffFromPrevDay) {
         this.diffFromPrevDay = diffFromPrevDay;
+    }
+
+    public int getLatestTotalRecoveryCases() {
+        return latestTotalRecoveryCases;
+    }
+
+    public void setLatestTotalRecoveryCases(int latestTotalRecoveryCases) {
+        this.latestTotalRecoveryCases = latestTotalRecoveryCases;
     }
 }
