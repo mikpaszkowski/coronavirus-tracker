@@ -44,4 +44,21 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping("/reported_cases")
+    public String reportedCases(Model model){
+
+        List<LocationStats> allStats = coronaVirusDataService.getAllStats();
+
+        List<LocationStats> allStatsRecovery = coronaVirusDataService.getAllStatsRecovery();
+
+        NumberFormat numberFormat = NumberFormat.getInstance();
+
+        model.addAttribute("locationStats", allStats);
+        model.addAttribute("locationStatsRecovery", allStatsRecovery);
+
+
+        return "reportedCases";
+    }
+
+
 }

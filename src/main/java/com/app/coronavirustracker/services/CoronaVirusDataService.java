@@ -21,8 +21,8 @@ import java.util.List;
 @Service
 public class CoronaVirusDataService {
 
-    private String VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
-    private String VIRUS_DATA_URL_RECOVERY = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv";
+    private final String VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
+    private final String VIRUS_DATA_URL_RECOVERY = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv";
 
 
     private List<LocationStats> allStats = new ArrayList<>();
@@ -42,7 +42,10 @@ public class CoronaVirusDataService {
     @Scheduled(cron = "0 0 5,12 * * *")
     public void fetchVirusData() throws IOException, InterruptedException {
 
+
         List<LocationStats> newStats = new ArrayList<>();
+
+        this.allStatsRecoveryList = getTotalDataRecoveryCasesList();
 
         //READING DATA FOR CONFIRMED CASES OF CORONAVIRUS
         HttpClient httpClient = HttpClient.newHttpClient();
@@ -56,30 +59,29 @@ public class CoronaVirusDataService {
         //parsing CSV file with HEADER AUTO DETECTION
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
 
-        int i = 0;
-
         for (CSVRecord record : records) {
 
             LocationStats locationStats = new LocationStats();
             locationStats.setState(record.get("Province/State"));
             locationStats.setCountry(record.get("Country/Region"));
             locationStats.setLatestTotalCases(Integer.parseInt(record.get(record.size()-1)));
-            //locationStats.setLatestTotalRecoveryCases(getTotalDataRecoveryCases(i));
+
+
 
             int latestTotalCases = Integer.parseInt(record.get(record.size()-1));
             int differenceFromPrevDay = latestTotalCases - Integer.parseInt(record.get(record.size() - 2));
 
             locationStats.setDiffFromPrevDay(differenceFromPrevDay);
             newStats.add(locationStats);
-            ++i;
         }
         this.allStats = newStats;
     }
 
-    /*
-    private int getTotalDataRecoveryCases(int i) throws IOException, InterruptedException {
 
-        List<LocationStats> newRecoveryStats = new ArrayList<>();
+    private List<Integer> getTotalDataRecoveryCasesList() throws IOException, InterruptedException {
+
+
+        List<Integer> newRecoveryStats = new ArrayList<>();
 
         //READING DATA FROM DIFFERENT IRL ADDRESS TO GAIN NUMBER OF RECOVERIES
         HttpClient httpClient1 = HttpClient.newHttpClient();
@@ -91,14 +93,14 @@ public class CoronaVirusDataService {
         StringReader csvBodyReader = new StringReader(httpResponse.body());
 
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
+
         for (CSVRecord record : records) {
             //adding number of total recovery cases to the list of integers
-            allStatsRecoveryList.add(Integer.parseInt(record.get(record.size()-1)));
-
+            newRecoveryStats.add(Integer.parseInt(record.get(record.size()-1)));
         }
-        return allStatsRecoveryList.get(i);
+        return newRecoveryStats;
     }
-*/
+
     @PostConstruct
     @Scheduled(cron = "0 0 5,12 * * *")
     public void fetchVirusDataRecovery() throws IOException, InterruptedException {
@@ -114,12 +116,12 @@ public class CoronaVirusDataService {
         StringReader csvBodyReader = new StringReader(httpResponse.body());
 
         Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
+
         for (CSVRecord record : records) {
             LocationStats locationStats = new LocationStats();
 
-            //adding number of total recovery cases to the list of integers
-            allStatsRecoveryList.add(Integer.parseInt(record.get(record.size()-1)));
-
+            locationStats.setState(record.get("Province/State"));
+            locationStats.setCountry(record.get("Country/Region"));
             //setting value of latestTotalRecoveryCases in LocationStats class
             locationStats.setLatestTotalRecoveryCases(Integer.parseInt(record.get(record.size()-1)));
 

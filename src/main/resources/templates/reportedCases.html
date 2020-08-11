@@ -19,61 +19,49 @@
     <div class="container">
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <h1><b><a class="navbar-brand" href="#">Coronavirus Tracker Application</a></b></h1>
+            <h1><b><a class="navbar-brand" href="/">Coronavirus Tracker Application</a></b></h1>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                        <li><a class="nav-link active" href="home.html">Home <span class="sr-only">(current)</span></a></li>
-                        <li>
+                        <li><a class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a></li>
+                        <li class="active">
                             <a class="nav-link" href="/reported_cases">Confirmed cases</a>
                         </li>
                     <!--
-                    <a class="nav-link" href="#">Recovery cases</a>
-                    <a class="nav-link" href="#">Death cases</a>
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                    -->
-
+                        <a class="nav-link" href="#">Recovery cases</a>
+                        <a class="nav-link" href="#">Death cases</a>
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                        -->
                 </div>
             </div>
         </nav>
 
         <span>This application lists the current number of cases reported across the globe.</span>
 
-        <div class="jumbotron bg-danger text-white">
-            <b>
-                <h1 class="display-4 " th:text="${totalReportedCases}"></h1>
-            </b>
-            <p class="lead">Total cases reported.</p>
-            <hr class="my-4 bg-danger text-white">
-            <p>
-                <span>New cases reported since previous day:</span>
-                <b>
-                    <span th:text="${totalNewCases}"></span>
-                </b>
-            </p>
-        </div>
 
-        <div class="jumbotron bg-success text-white">
-            <b>
-                <h1 class="display-4 " th:text="${totalRecoveryCases}"></h1>
-                <p class="lead">Total recovery cases reported.</p>
-            </b>
-            <hr class="my-4">
-            <p>
-                <span>New recovery cases reported since previous day:</span>
-                <b>
-                    <span th:text="${totalNewRecoveryCases}"></span>
-                </b>
-            </p>
-        </div>
         <nav class="navbar navbar-dark bg-dark">
             <form class="form-inline">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search your country..." aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </nav>
+
+        <table class="table table-dark">
+            <tr>
+                <th>State</th>
+                <th>Country</th>
+                <th>Total cases reported</th>
+                <th>Changes since last day</th>
+            </tr>
+            <tr th:each="locationStat : ${locationStats}">
+                <td th:text="${locationStat.state}"></td>
+                <td th:text="${locationStat.country}"></td>
+                <td th:text="${locationStat.latestTotalCases}">0</td>
+                <td th:text="${locationStat.diffFromPrevDay}">0</td>
+            </tr>
+        </table>
 
     </div>
 </div>
