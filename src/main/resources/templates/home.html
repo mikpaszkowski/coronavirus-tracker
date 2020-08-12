@@ -7,8 +7,7 @@
     <title>Coronavirus_tracker</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="main.css">
-    <link href="reportedCases.html" rel="stylesheet">
+    <link rel="stylesheet" href="main.css" media="screen">
 </head>
 
 <body>
@@ -24,22 +23,19 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
+                <div class="navbar-nav ml-auto">
                         <li><a class="nav-link active" href="home.html">Home <span class="sr-only">(current)</span></a></li>
                         <li>
                             <a class="nav-link" href="/reported_cases">Confirmed cases</a>
                         </li>
-                    <!--
-                    <a class="nav-link" href="#">Recovery cases</a>
-                    <a class="nav-link" href="#">Death cases</a>
+                    <a class="nav-link" href="/reported_cases_recovery">Recovery cases</a>
+                    <a class="nav-link" href="/reported_cases_deaths">Death cases</a>
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                    -->
-
                 </div>
             </div>
         </nav>
 
-        <span>This application lists the current number of cases reported across the globe.</span>
+        <p><a class="text-light bg-dark">This application provides with the current virus-data across the globe.</a></p>
 
         <div class="jumbotron bg-danger text-white">
             <b>
@@ -65,6 +61,20 @@
                 <span>New recovery cases reported since previous day:</span>
                 <b>
                     <span th:text="${totalNewRecoveryCases}"></span>
+                </b>
+            </p>
+        </div>
+
+        <div class="jumbotron bg-warning text-dark">
+            <b>
+                <h1 class="display-4 " th:text="${totalDeathCases}"></h1>
+                <p class="lead">Total death cases reported.</p>
+            </b>
+            <hr class="my-4">
+            <p>
+                <span>New death cases reported since previous day:</span>
+                <b>
+                    <span th:text="${totalNewDeathCases}"></span>
                 </b>
             </p>
         </div>

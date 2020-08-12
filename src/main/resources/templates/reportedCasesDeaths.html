@@ -12,11 +12,11 @@
 
 <body>
 
+
+
 <div class="p-3 mb-2 bg-dark text-dark">
 
-
     <div class="container">
-
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <h1><b><a class="navbar-brand" href="/">Coronavirus Tracker Application</a></b></h1>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,19 +24,19 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav ml-auto">
-                        <li><a class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a></li>
-                        <li class="active">
-                            <a class="nav-link" href="/reported_cases">Confirmed cases</a>
-                        </li>
+                    <li><a class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a></li>
+                    <li class="active">
+                        <a class="nav-link" href="/reported_cases">Confirmed cases</a>
+                    </li>
 
-                        <a class="nav-link" href="/reported_cases_recovery">Recovery cases</a>
-                        <a class="nav-link" href="#">Death cases</a>
-                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    <a class="nav-link" href="/reported_cases_recovery">Recovery cases</a>
+                    <a class="nav-link" href="/reported_cases_deaths">Death cases</a>
+                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                 </div>
             </div>
         </nav>
         <div class="jumbotron">
-            <h1 class="display-4">Confirmed cases</h1>
+            <h1 class="display-4">Death cases</h1>
         </div>
         <nav class="navbar navbar-dark bg-dark">
             <form class="form-inline">
@@ -44,7 +44,6 @@
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </nav>
-
         <table class="table table-dark">
             <tr>
                 <th>State</th>
@@ -52,14 +51,13 @@
                 <th>Total cases reported</th>
                 <th>Changes since last day</th>
             </tr>
-            <tr th:each="locationStat : ${locationStats}">
-                <td th:text="${locationStat.state}"></td>
-                <td th:text="${locationStat.country}"></td>
-                <td th:text="${locationStat.latestTotalCases}">0</td>
-                <td th:text="${locationStat.diffFromPrevDay}">0</td>
+            <tr th:each="locationStats : ${locationStatsDeaths}">
+                <td th:text="${locationStats.state}"></td>
+                <td th:text="${locationStats.country}"></td>
+                <td th:text="${locationStats.latestTotalDeathCases}">0</td>
+                <td th:text="${locationStats.diffFromPrevDay}">0</td>
             </tr>
         </table>
-
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

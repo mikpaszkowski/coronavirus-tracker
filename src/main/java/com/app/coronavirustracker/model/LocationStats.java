@@ -10,6 +10,16 @@ public class LocationStats {
     private int diffFromPrevDay;
     private int latestTotalRecoveryCases;
 
+    public int getLatestTotalDeathCases() {
+        return latestTotalDeathCases;
+    }
+
+    public void setLatestTotalDeathCases(int latestTotalDeathCases) {
+        this.latestTotalDeathCases = latestTotalDeathCases;
+    }
+
+    private int latestTotalDeathCases;
+
     public int getDiffRecoveryCasesFromPrevDay() {
         return diffRecoveryCasesFromPrevDay;
     }

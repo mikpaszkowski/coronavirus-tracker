@@ -24,22 +24,25 @@ public class HomeController {
 
         List<LocationStats> allStatsRecovery = coronaVirusDataService.getAllStatsRecovery();
 
-        int totalCases = allStats.stream().mapToInt(stat -> stat.getLatestTotalCases()).sum();
+        List<LocationStats> allStatsDeaths = coronaVirusDataService.getAllStatsDeaths();
 
+        int totalCases = allStats.stream().mapToInt(stat -> stat.getLatestTotalCases()).sum();
         int totalNewCases = allStats.stream().mapToInt(stat -> stat.getDiffFromPrevDay()).sum();
 
         int totalNewRecoveryCases = allStatsRecovery.stream().mapToInt(stat -> stat.getDiffRecoveryCasesFromPrevDay()).sum();
-
         int totalRecoveryCases = allStatsRecovery.stream().mapToInt(stat -> stat.getLatestTotalRecoveryCases()).sum();
+
+        int totalDeathCases = allStatsDeaths.stream().mapToInt(stat -> stat.getLatestTotalDeathCases()).sum();
+        int totalNewDeathCases  = allStatsDeaths.stream().mapToInt(stat -> stat.getDiffFromPrevDay()).sum();
 
         NumberFormat numberFormat = NumberFormat.getInstance();
 
-        model.addAttribute("locationStats", allStats);
-        model.addAttribute("locationStatsRecovery", allStatsRecovery);
         model.addAttribute("totalReportedCases", numberFormat.format(totalCases));
         model.addAttribute("totalNewCases", numberFormat.format(totalNewCases));
         model.addAttribute("totalNewRecoveryCases", numberFormat.format(totalNewRecoveryCases));
         model.addAttribute("totalRecoveryCases", numberFormat.format(totalRecoveryCases));
+        model.addAttribute("totalDeathCases", numberFormat.format(totalDeathCases));
+        model.addAttribute("totalNewDeathCases", numberFormat.format(totalNewDeathCases));
 
         return "home";
     }
@@ -58,6 +61,27 @@ public class HomeController {
 
 
         return "reportedCases";
+    }
+
+    @GetMapping("/reported_cases_recovery")
+    public String reportedCasesRecovery(Model model){
+
+        List<LocationStats> allStatsRecovery = coronaVirusDataService.getAllStatsRecovery();
+
+        model.addAttribute("locationStatsRecovery", allStatsRecovery);
+
+
+        return "reportedCasesRecovery";
+    }
+
+    @GetMapping("/reported_cases_deaths")
+    public String reportedCasesDeaths(Model model){
+
+        List<LocationStats> allStatsDeaths = coronaVirusDataService.getAllStatsDeaths();;
+
+        model.addAttribute("locationStatsDeaths", allStatsDeaths);
+
+        return "reportedCasesDeaths";
     }
 
 

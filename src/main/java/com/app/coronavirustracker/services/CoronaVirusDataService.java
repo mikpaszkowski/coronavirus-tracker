@@ -23,20 +23,21 @@ public class CoronaVirusDataService {
 
     private final String VIRUS_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
     private final String VIRUS_DATA_URL_RECOVERY = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv";
+    private final String VIRUS_DATA_URL_DEATHS = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv";
 
 
     private List<LocationStats> allStats = new ArrayList<>();
     private List<LocationStats> allStatsRecovery = new ArrayList<>();
-    private List<Integer> allStatsRecoveryList = new ArrayList<>();
+    private List<LocationStats> allStatsDeaths = new ArrayList<>();
 
-
-    public List<Integer> getAllStatsRecoveryList() {
-        return allStatsRecoveryList;
+    public List<LocationStats> getAllStatsDeaths() {
+        return allStatsDeaths;
     }
 
-    public void setAllStatsRecoveryList(List<Integer> allStatsRecoveryList) {
-        this.allStatsRecoveryList = allStatsRecoveryList;
+    public void setAllStatsDeaths(List<LocationStats> allStatsDeaths) {
+        this.allStatsDeaths = allStatsDeaths;
     }
+
 
     @PostConstruct
     @Scheduled(cron = "0 0 5,12 * * *")
@@ -45,7 +46,6 @@ public class CoronaVirusDataService {
 
         List<LocationStats> newStats = new ArrayList<>();
 
-        this.allStatsRecoveryList = getTotalDataRecoveryCasesList();
 
         //READING DATA FOR CONFIRMED CASES OF CORONAVIRUS
         HttpClient httpClient = HttpClient.newHttpClient();
@@ -78,29 +78,6 @@ public class CoronaVirusDataService {
     }
 
 
-    private List<Integer> getTotalDataRecoveryCasesList() throws IOException, InterruptedException {
-
-
-        List<Integer> newRecoveryStats = new ArrayList<>();
-
-        //READING DATA FROM DIFFERENT IRL ADDRESS TO GAIN NUMBER OF RECOVERIES
-        HttpClient httpClient1 = HttpClient.newHttpClient();
-        HttpRequest httpRequest1 = HttpRequest.newBuilder()
-                .uri(URI.create(VIRUS_DATA_URL_RECOVERY))
-                .build();
-
-        HttpResponse<String> httpResponse = httpClient1.send(httpRequest1, HttpResponse.BodyHandlers.ofString());
-        StringReader csvBodyReader = new StringReader(httpResponse.body());
-
-        Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
-
-        for (CSVRecord record : records) {
-            //adding number of total recovery cases to the list of integers
-            newRecoveryStats.add(Integer.parseInt(record.get(record.size()-1)));
-        }
-        return newRecoveryStats;
-    }
-
     @PostConstruct
     @Scheduled(cron = "0 0 5,12 * * *")
     public void fetchVirusDataRecovery() throws IOException, InterruptedException {
@@ -132,6 +109,40 @@ public class CoronaVirusDataService {
             newRecoveryStats.add(locationStats);
         }
         this.allStatsRecovery = newRecoveryStats;
+    }
+
+    @PostConstruct
+    @Scheduled(cron = "0 0 5,12 * * *")
+    public void fetchVirusDataDeathCases() throws IOException, InterruptedException {
+
+        List<LocationStats> newDeathStats = new ArrayList<>();
+
+        //READING DATA FROM DIFFERENT IRL ADDRESS TO GAIN NUMBER OF RECOVERIES
+        HttpClient httpClient1 = HttpClient.newHttpClient();
+        HttpRequest httpRequest1 = HttpRequest.newBuilder()
+                .uri(URI.create(VIRUS_DATA_URL_DEATHS))
+                .build();
+        HttpResponse<String> httpResponse = httpClient1.send(httpRequest1, HttpResponse.BodyHandlers.ofString());
+        StringReader csvBodyReader = new StringReader(httpResponse.body());
+
+        Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(csvBodyReader);
+
+        for (CSVRecord record : records) {
+            LocationStats locationStats = new LocationStats();
+
+            locationStats.setState(record.get("Province/State"));
+            locationStats.setCountry(record.get("Country/Region"));
+
+            //setting value of latestTotalRecoveryCases in LocationStats class
+            locationStats.setLatestTotalDeathCases(Integer.parseInt(record.get(record.size()-1)));
+
+            int latestTotalRecoveryCases = Integer.parseInt(record.get(record.size()-1));
+            int differenceFromPrevDay = latestTotalRecoveryCases - Integer.parseInt(record.get(record.size() - 2));
+
+            locationStats.setDiffFromPrevDay(differenceFromPrevDay);
+            newDeathStats.add(locationStats);
+        }
+        this.allStatsDeaths= newDeathStats;
     }
 
     public List<LocationStats> getAllStats() {

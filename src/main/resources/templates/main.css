@@ -1,0 +1,12 @@
+
+label.navbar{
+    background-color: aqua;
+}
+.navbar .navbar-nav li a{
+    color: #fff;
+}
+label.navbar .navbar-nav li{
+    color: gainsboro;
+    background-color: #fbfbfb;
+    border-radius: 10px;
+}
