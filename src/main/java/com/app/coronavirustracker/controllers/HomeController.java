@@ -35,6 +35,7 @@ public class HomeController {
         int totalDeathCases = allStatsDeaths.stream().mapToInt(stat -> stat.getLatestTotalDeathCases()).sum();
         int totalNewDeathCases  = allStatsDeaths.stream().mapToInt(stat -> stat.getDiffFromPrevDay()).sum();
 
+
         NumberFormat numberFormat = NumberFormat.getInstance();
 
         model.addAttribute("totalReportedCases", numberFormat.format(totalCases));
@@ -43,6 +44,7 @@ public class HomeController {
         model.addAttribute("totalRecoveryCases", numberFormat.format(totalRecoveryCases));
         model.addAttribute("totalDeathCases", numberFormat.format(totalDeathCases));
         model.addAttribute("totalNewDeathCases", numberFormat.format(totalNewDeathCases));
+
 
         return "home";
     }
@@ -74,6 +76,25 @@ public class HomeController {
         return "reportedCasesRecovery";
     }
 
+    @GetMapping("/daily_report")
+    public String dailyReport(Model model){
+
+        List<LocationStats> allStatsRecovery = coronaVirusDataService.getAllStatsRecovery();
+        List<LocationStats> allStatsDeaths = coronaVirusDataService.getAllStatsDeaths();
+        List<LocationStats> allStats = coronaVirusDataService.getAllStats();
+
+
+        LocationStats MaxDeathsLocationStats = findTheMaximum(allStatsDeaths, "death");
+        LocationStats MaxRecoveryLocationStats = findTheMaximum(allStatsRecovery, "recovery");
+        LocationStats MaxConfirmedLocationStats = findTheMaximum(allStats, "confirmed");
+
+        model.addAttribute("maxRecovery", MaxRecoveryLocationStats);
+        model.addAttribute("maxDeaths", MaxDeathsLocationStats);
+        model.addAttribute("maxConfirmed", MaxConfirmedLocationStats);
+
+        return "dailyReport";
+    }
+
     @GetMapping("/reported_cases_deaths")
     public String reportedCasesDeaths(Model model){
 
@@ -82,6 +103,64 @@ public class HomeController {
         model.addAttribute("locationStatsDeaths", allStatsDeaths);
 
         return "reportedCasesDeaths";
+    }
+
+
+    public LocationStats findTheMaximum(List<LocationStats> locationStats, String recoveryOrDeaths){
+
+        int temp = 0;
+        int a = 0;
+        int b = 0;
+
+        LocationStats maxLocationStats = new LocationStats();
+
+        switch (recoveryOrDeaths){
+
+            case "recovery":
+
+                int maxRecovery = locationStats.get(0).getDiffRecoveryCasesFromPrevDay();
+
+                for(int i = 1; i < locationStats.size(); i++){
+
+                    if(locationStats.get(i).getDiffRecoveryCasesFromPrevDay() > maxRecovery){
+                        maxRecovery = locationStats.get(i).getDiffRecoveryCasesFromPrevDay();
+                        maxLocationStats = locationStats.get(i);
+                    }
+                }
+                break;
+
+            case "death":
+
+                int maxDeath = locationStats.get(0).getDiffFromPrevDay();
+
+                for(int i = 1; i < locationStats.size(); i++){
+
+                    if(locationStats.get(i).getDiffFromPrevDay() > maxDeath){
+                        System.out.println(locationStats.get(i).getDiffFromPrevDay());
+                        maxDeath = locationStats.get(i).getDiffFromPrevDay();
+                        maxLocationStats = locationStats.get(i);
+                    }
+                }
+                break;
+
+            case "confirmed":
+
+                int maxConfirmed = locationStats.get(0).getDiffFromPrevDay();
+                for(int i = 1; i < locationStats.size(); i++){
+
+                    if(locationStats.get(i).getDiffFromPrevDay() > maxConfirmed){
+                        maxConfirmed = locationStats.get(i).getDiffFromPrevDay();
+                        maxLocationStats = locationStats.get(i);
+                    }
+                }
+                break;
+            default:
+                System.out.println("There is no such word-case in the function.");
+                System.out.println("Write these three cases : ");
+                System.out.println("recovery\ndeath\nconfirmed");
+                return null;
+        }
+        return maxLocationStats;
     }
 
 

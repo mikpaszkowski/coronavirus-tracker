@@ -7,8 +7,7 @@
     <title>Coronavirus_tracker</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="main.css">
-    <link href="reportedCases.html" rel="stylesheet">
+    <link rel="stylesheet" href="main.css" media="screen">
 </head>
 
 <body>
@@ -19,17 +18,16 @@
     <div class="container">
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <h1><b><a class="navbar-brand" href="/">Coronavirus Tracker Application</a></b></h1>
+            <h1><b><a class="navbar-brand" href="#">Coronavirus Tracker Application</a></b></h1>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
+                <div class="navbar-nav ml-auto">
                     <li><a class="nav-link active" href="/">Home <span class="sr-only">(current)</span></a></li>
-                    <li class="active">
+                    <li>
                         <a class="nav-link" href="/reported_cases">Confirmed cases</a>
                     </li>
-
                     <a class="nav-link" href="/reported_cases_recovery">Recovery cases</a>
                     <a class="nav-link" href="/reported_cases_deaths">Death cases</a>
                     <a class="nav-link" href="/daily_report">Daily report</a>
@@ -37,31 +35,40 @@
                 </div>
             </div>
         </nav>
-        <div class="jumbotron">
-            <h1 class="display-4">Recovery cases</h1>
+
+        <p><a class="text-light bg-dark">This application provides with the current virus-data across the globe.</a></p>
+
+        <div class="jumbotron bg-danger text-white">
+            <b>
+                <h1 class="display-4 " th:text="${maxConfirmed.getCountry()}"></h1>
+                <h1 class="display-2 " th:text="${maxConfirmed.getDiffFromPrevDay()}"></h1>
+            </b>
+            <p class="lead">Maximum daily growth of new cases.</p>
+
         </div>
 
+        <div class="jumbotron bg-success text-white">
+            <b>
+                <h1 class="display-4 " th:text="${maxRecovery.getCountry()}"></h1>
+                <h1 class="display-2" th:text="${maxRecovery.getDiffRecoveryCasesFromPrevDay()}"></h1>
+                <p class="lead">Maximum daily growth of recovery cases.</p>
+            </b>
+        </div>
+
+        <div class="jumbotron bg-warning text-dark">
+            <b>
+                <h1 class="display-4 " th:text="${maxDeaths.getCountry()}"></h1>
+                <h1 class="display-2 " th:text="${maxDeaths.getDiffFromPrevDay()}"></h1>
+                <p class="lead">Maximum daily growth of death cases.</p>
+            </b>
+
+        </div>
         <nav class="navbar navbar-dark bg-dark">
             <form class="form-inline">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search your country..." aria-label="Search">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
         </nav>
-
-        <table class="table table-dark">
-            <tr>
-                <th>State</th>
-                <th>Country</th>
-                <th>Total cases reported</th>
-                <th>Changes since last day</th>
-            </tr>
-            <tr th:each="locationStats : ${locationStatsRecovery}">
-                <td th:text="${locationStats.state}"></td>
-                <td th:text="${locationStats.country}"></td>
-                <td th:text="${locationStats.latestTotalRecoveryCases}">0</td>
-                <td th:text="${locationStats.diffRecoveryCasesFromPrevDay}">0</td>
-            </tr>
-        </table>
 
     </div>
 </div>
