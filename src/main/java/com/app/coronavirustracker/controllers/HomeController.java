@@ -65,6 +65,23 @@ public class HomeController {
         return "reportedCases";
     }
 
+
+    @GetMapping("/reported_cases_filtered")
+    public String reportedCasesFiltered(Model model){
+
+        List<LocationStats> allStats = coronaVirusDataService.getAllStats();
+
+        List<LocationStats> allStatsRecovery = coronaVirusDataService.getAllStatsRecovery();
+
+        NumberFormat numberFormat = NumberFormat.getInstance();
+
+        model.addAttribute("locationStats", allStats);
+        model.addAttribute("locationStatsRecovery", allStatsRecovery);
+
+
+        return "reportedCasesFiltered";
+    }
+
     @GetMapping("/reported_cases_recovery")
     public String reportedCasesRecovery(Model model){
 
@@ -74,6 +91,17 @@ public class HomeController {
 
 
         return "reportedCasesRecovery";
+    }
+
+    @GetMapping("/reported_cases_recovery_filtered")
+    public String reportedCasesRecoveryFiltered(Model model){
+
+        List<LocationStats> allStatsRecovery = coronaVirusDataService.getAllStatsRecovery();
+
+        model.addAttribute("locationStatsRecovery", allStatsRecovery);
+
+
+        return "reportedCasesRecoveryFiltered";
     }
 
     @GetMapping("/daily_report")

@@ -1,5 +1,5 @@
 
-label.navbar{
+body{
     background-color: aqua;
 }
 .navbar .navbar-nav li a{
@@ -10,3 +10,4 @@ label.navbar .navbar-nav li{
     background-color: #fbfbfb;
     border-radius: 10px;
 }
+
