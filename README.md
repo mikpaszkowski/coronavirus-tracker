@@ -9,6 +9,7 @@ Tech Stack:
 3. Upload -> Heroku
 
 The main source of the data for this app is a repository on github.
+https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data
 We can find there a csv file with a up-to-date data about the reported/death/recovery cases
 of COVID-19. 
 
