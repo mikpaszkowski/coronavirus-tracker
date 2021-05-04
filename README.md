@@ -1,8 +1,8 @@
-Simple Coronavirus-Tracker Application
+# Simple Coronavirus-Tracker Application :petri_dish: :dna:
 
 https://coronavirus-tracker-2020.herokuapp.com/
 
-Tech Stack:
+## :wrench: Tech Stack:
 
 1. HTML + Bootstrap 4 + Thymeleaf 3 (Spring)
 2. Java (Spring Boot)
